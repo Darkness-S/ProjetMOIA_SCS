@@ -1,0 +1,31 @@
+
+    FONCTIONS DE CREATION DES SOCKETS EN MODE TCP
+    ---------------------------------------------
+
+   	TP SCS Master 1 Informatique
+	--------------------------------
+
+
+FICHIERS :
+----------
+
+fonctionsTCP.c : fonctions de creation des sockets connectees 
+                    pour le client et le serveur
+
+client.c : programme client, envoie une chaine au serveur
+
+serveur.c : programme serveur, recoit la chaine
+
+Makefile : compilation
+
+
+UTILISATION :
+-------------
+
+1. compilation : make
+
+2. execution du serveur : serveur no_port 
+			  (ex: serveur 2609)
+
+3. execution du client : client nom_machine_serveur no_port_serveur
+			 (ex: client ray2001 2609)

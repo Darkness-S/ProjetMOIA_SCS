@@ -3,11 +3,12 @@
  *
  *  Programme : serveur.c
  *
- *  ecrit par : Sammy Loudiyi.
+ *  ecrit par : LP.
  *
- *  resume :    Serveur du jeu "Colonnes de trois".
+ *  resume :    recoit une chaine de caracteres du programme client
+ *                en mode connecte
  *
- *  date :      15 / 03 / 17
+ *  date :      25 / 01 / 06
  *
  *******************************************************************
  */
@@ -25,15 +26,11 @@
 #include <netinet/in.h>
  
 /* include fonctions TCP */
-#include "../../include/fonctionsTCP.h"
+#include "fonctionsTCP.h"
 
-/* include pour le protocole de communication */
-#include "../../include/protocoleColonne.h"
-#include "../../include/validation.h"
 
 /* taille du buffer de reception */
 #define TAIL_BUF 100
-#define TIME_MAX 6000
 
 int main(int argc, char** argv) {
   int sock_cont, 
