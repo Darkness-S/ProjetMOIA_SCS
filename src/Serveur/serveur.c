@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 /* include pour close */
 #include <unistd.h>
@@ -36,7 +37,8 @@
 #define TIME_MAX 6000
 
 int main(int argc, char** argv) {
-  int sock_cont, 
+  int nbJoueur=0,
+	  sock_cont, 
       sock_trans,       /* descripteurs des sockets locales */
       err;	        /* code d'erreur */
 
@@ -45,8 +47,10 @@ int main(int argc, char** argv) {
   
   char            buffer[TAIL_BUF];	/* buffer de reception */
   
+  TPartieReq    	parReqJ1, parReqJ2;
+  TPartieRep 		parRepJ1, parRepJ2;
   socklen_t      size_addr_trans;	/* taille de l'adresse d'une socket */
-  
+  rand(time(NULL));
   
   
   /*
@@ -86,17 +90,56 @@ int main(int argc, char** argv) {
   }
   
   /*
-   * reception et affichage du message en provenance du client
+   * reception de la requête de début de partie.
    */
-  err = recv(sock_trans, buffer, TAIL_BUF, 0);
+	while(nbJoueur <2){
+		if(nbJoueur ==0){
+			err = recv(sock_trans, &parReqJ1, sizeof(TPartieReq), 0);
+			if (err < 0) {
+				perror("serveur: erreur dans la reception");
+				shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
+				close(sock_cont);
+				return 4;
+			}
+			if (parReq1.idRequest!=0){
+				parRepJ1.err=1;
+				parRepJ1.coul=0;
+				parRepJ1.nomAdvers[5]="NULL";
+			}
+			nbJoueur++;
+		}else{
+			err = recv(sock_trans, &parReqJ2, sizeof(TPartieReq), 0);
+			if (err < 0 && parReq1.idRequest==0) {
+				perror("serveur: erreur dans la reception");
+				shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
+				close(sock_cont);
+				return 4;
+			} 
+			if (parReq2.idRequest!=0){
+				parRepJ2.err=1;
+				parRepJ2.coul=0;
+				parRepJ2.nomAdvers[5]="NULL";
+			}	 
+			nbJoueur++;
+		}
+	}
+	parRepJ1.err=0;
+	parRepJ1.coul=0;
+	parRepJ1.nomAdvers[TNOM]=parReqJ2.nomJoueur[TNOM];
+	parRepJ2.err=0;
+	parRepJ2.coul=1;
+	parRepJ2.nomAdvers[TNOM]=parReqJ2.nomJoueur[TNOM];
+	
+  err = recv(sock_trans, &parReq, sizeof(TPartieReq), 0);
   if (err < 0) {
     perror("serveur: erreur dans la reception");
     shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
     close(sock_cont);
     return 4;
   }
-  printf("(serveur) le message recu: %s\n", buffer);
-  
+	  
+	switch (parReq.idRequest){
+		case 0 : 
   /* 
    * arret de la connexion et fermeture
    */
