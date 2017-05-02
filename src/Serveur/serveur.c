@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <stdbool.h>
 /* include pour close */
 #include <unistd.h>
 
@@ -39,17 +39,20 @@
 int main(int argc, char** argv) {
   int nbJoueur=0,
   	  etatPartie=0,
+  	  nbPartie=0,
 	  sock_cont, 
-      sock_trans,       /* descripteurs des sockets locales */
+      sock_transJ1,
+      sock_transJ2,       /* descripteurs des sockets locales */
       err;	        /* code d'erreur */
 
+  int* tourJ1, tourJ2; /*Défini à qui est-ce le tour de jouer*/
   struct sockaddr_in nom_transmis;	/* adresse de la socket de */
 					                     /* transmission */
   
   char            buffer[TAIL_BUF];	/* buffer de reception */
   
-  TPartieReq    	parReqJ1, parReqJ2;
-  TPartieRep 		parRepJ1, parRepJ2;
+  TPartieReq    	parReqJ1, parReqJ2, parReqTemp;
+  TPartieRep 		parRepJ1, parRepJ2, parRepTemp;
   TCoupReq			parCoupReqJ1, parCoupReqJ2;
   TCoupRep			parCoupRepJ1, parCoupRepJ2;
   socklen_t      size_addr_trans;	/* taille de l'adresse d'une socket */
@@ -83,10 +86,19 @@ int main(int argc, char** argv) {
   /*
    * attente de connexion
    */
-  sock_trans = accept(sock_cont, 
+  sock_transJ1 = accept(sock_cont, 
 		      (struct sockaddr *)&nom_transmis, 
 		      &size_addr_trans);
-  if (sock_trans < 0) {
+  if (sock_transJ1 < 0) {
+    perror("serveur :  erreur sur accept");
+    close(sock_cont);
+    return 3; 
+  }
+  
+  sock_transJ2 = accept(sock_cont, 
+		      (struct sockaddr *)&nom_transmis, 
+		      &size_addr_trans);
+  if (sock_transJ2 < 0) {
     perror("serveur :  erreur sur accept");
     close(sock_cont);
     return 3; 
@@ -97,7 +109,7 @@ int main(int argc, char** argv) {
    */
 	while(nbJoueur <2){
 		if(nbJoueur ==0){
-			err = recv(sock_trans, &parReqJ1, sizeof(TPartieReq), 0);
+			err = recv(sock_transJ1, &parReqJ1, sizeof(TPartieReq), 0);
 			if (err < 0) {
 				perror("serveur: erreur dans la reception");
 				shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
@@ -111,7 +123,7 @@ int main(int argc, char** argv) {
 			}
 			nbJoueur++;
 		}else{
-			err = recv(sock_trans, &parReqJ2, sizeof(TPartieReq), 0);
+			err = recv(sock_transJ2, &parReqJ2, sizeof(TPartieReq), 0);
 			if (err < 0 && parReq1.idRequest==0) {
 				perror("serveur: erreur dans la reception");
 				shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
@@ -132,10 +144,12 @@ int main(int argc, char** argv) {
 	parRepJ2.err=0;
 	parRepJ2.coul=1;
 	parRepJ2.nomAdvers[TNOM]=parReqJ2.nomJoueur[TNOM];
-	
-
+	//TODO Renvoi aux deux joueurs ainsi que le numéro de partie
+	tourJ1 = &sock_transJ1;
+	tourJ2 = &sock_transJ2;
+	//TODO Demander au joueur 1 de commencer son coup 
 	while (nbJoueur<2){
-		err = recv(sock_trans, &parCoupReqJ1, sizeof(TCoupReq), 0);
+		err = recv(*tourJ1, &parCoupReqJ1, sizeof(TCoupReq), 0);
 		if (err < 0) {
 			perror("serveur: erreur dans la reception");
 			shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
@@ -143,10 +157,19 @@ int main(int argc, char** argv) {
 			return 4;
 		}
 		if (parCoupReq1.idRequest!=1){
-			parCoupRepJ1.err=3,
-			parCoupRepJ1.validCoup=2,
-			parCoupRepJ1.propCoup=3,
+			parCoupRepJ1.err=3;
+			parCoupRepJ1.validCoup=2;
+			parCoupRepJ1.propCoup=3;
+			//TODO envoi aux deux joueurs et fin partie
 		}else{
+			if(validationCoup(parCoupReqJ1.coul++, parCoupReqJ1, parCoupJ1.propCoup)==true){
+				parCoupRepJ1.err=0;
+				parCoupRepJ1.validCoup=0;
+				parCoupRepJ1.
+				if(parCoupJ1.propCoup==0){
+					//TODO renvoi coup à joueur adverse
+				}
+			}
 			
 		}
 		nbJoueur++;
@@ -164,8 +187,10 @@ int main(int argc, char** argv) {
   /* 
    * arret de la connexion et fermeture
    */
-  shutdown(sock_trans, SHUT_RDWR);
-  close(sock_trans);
+  shutdown(sock_transJ1, SHUT_RDWR);
+  shutdown(sock_transJ2, SHUT_RDWR);
+  close(sock_transJ1);
+  close(sock_transJ2);
   close(sock_cont);
   return 0;
 }
