@@ -38,6 +38,7 @@
 
 int main(int argc, char** argv) {
   int nbJoueur=0,
+  	  etatPartie=0,
 	  sock_cont, 
       sock_trans,       /* descripteurs des sockets locales */
       err;	        /* code d'erreur */
@@ -49,6 +50,8 @@ int main(int argc, char** argv) {
   
   TPartieReq    	parReqJ1, parReqJ2;
   TPartieRep 		parRepJ1, parRepJ2;
+  TCoupReq			parCoupReqJ1, parCoupReqJ2;
+  TCoupRep			parCoupRepJ1, parCoupRepJ2;
   socklen_t      size_addr_trans;	/* taille de l'adresse d'une socket */
   rand(time(NULL));
   
@@ -130,6 +133,24 @@ int main(int argc, char** argv) {
 	parRepJ2.coul=1;
 	parRepJ2.nomAdvers[TNOM]=parReqJ2.nomJoueur[TNOM];
 	
+
+	while (nbJoueur<2){
+		err = recv(sock_trans, &parCoupReqJ1, sizeof(TCoupReq), 0);
+		if (err < 0) {
+			perror("serveur: erreur dans la reception");
+			shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
+			close(sock_cont);
+			return 4;
+		}
+		if (parCoupReq1.idRequest!=1){
+			parCoupRepJ1.err=3,
+			parCoupRepJ1.validCoup=2,
+			parCoupRepJ1.propCoup=3,
+		}else{
+			
+		}
+		nbJoueur++;
+	}
   err = recv(sock_trans, &parReq, sizeof(TPartieReq), 0);
   if (err < 0) {
     perror("serveur: erreur dans la reception");
