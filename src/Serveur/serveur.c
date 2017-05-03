@@ -28,6 +28,9 @@
 /* include fonctions TCP */
 #include "../../include/fonctionsTCP.h"
 
+/* include pour les fonctions du serveur*/
+#include "../../include/fonctionsServeur.h"
+
 /* include pour le protocole de communication */
 #include "../../include/protocoleColonne.h"
 #include "../../include/validation.h"
@@ -45,7 +48,6 @@ int main(int argc, char** argv) {
       sock_transJ2,       /* descripteurs des sockets locales */
       err;	        /* code d'erreur */
 
-  int* tourJ1, tourJ2; /*Défini à qui est-ce le tour de jouer*/
   struct sockaddr_in nom_transmis;	/* adresse de la socket de */
 					                     /* transmission */
   
@@ -107,72 +109,68 @@ int main(int argc, char** argv) {
   /*
    * reception de la requête de début de partie.
    */
-	while(nbJoueur <2){
-		if(nbJoueur ==0){
-			err = recv(sock_transJ1, &parReqJ1, sizeof(TPartieReq), 0);
+	/*err = recv(sock_transJ1, &parReqJ1, sizeof(TPartieReq), 0);
+	if (err < 0) {
+		perror("serveur: erreur dans la reception");
+		shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
+		close(sock_cont);
+		return 4;
+	}
+	if (parReq1.idRequest!=0){
+		parRepJ1.err=1;
+		parRepJ1.coul=0;
+		parRepJ1.nomAdvers[5]="NULL";
+	}
+	err = recv(sock_transJ2, &parReqJ2, sizeof(TPartieReq), 0);
+	if (err < 0 && parReq1.idRequest==0) {
+		perror("serveur: erreur dans la reception");
+		shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
+		close(sock_cont);
+		return 4;
+	} 
+	if (parReq2.idRequest!=0){
+		parRepJ2.err=1;
+		parRepJ2.coul=0;
+		parRepJ2.nomAdvers[5]="NULL";
+	}	 
+	parRepJ1.err=0;
+	parRepJ1.coul=0;
+	parRepJ1.nomAdvers[TNOM]=parReqJ2.nomJoueur[TNOM];
+	parRepJ2.err=0;
+	parRepJ2.coul=1;
+	parRepJ2.nomAdvers[TNOM]=parReqJ2.nomJoueur[TNOM];*/
+	
+	demPartie(socket_cont, sock_transJ1, sock_transJ2, parReqJ1, parReqJ2, parRepJ1, parRepJ2);
+	
+	//TODO Renvoi aux deux joueurs ainsi que le numéro de partie
+	//TODO Demander au joueur 1 de commencer son coup 
+	while (nbPartie<2){
+		while (etatPartie<1){
+			err = recv(*tourJ1, &parCoupReqJ1, sizeof(TCoupReq), 0);
 			if (err < 0) {
 				perror("serveur: erreur dans la reception");
 				shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
 				close(sock_cont);
 				return 4;
 			}
-			if (parReq1.idRequest!=0){
-				parRepJ1.err=1;
-				parRepJ1.coul=0;
-				parRepJ1.nomAdvers[5]="NULL";
-			}
-			nbJoueur++;
-		}else{
-			err = recv(sock_transJ2, &parReqJ2, sizeof(TPartieReq), 0);
-			if (err < 0 && parReq1.idRequest==0) {
-				perror("serveur: erreur dans la reception");
-				shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
-				close(sock_cont);
-				return 4;
-			} 
-			if (parReq2.idRequest!=0){
-				parRepJ2.err=1;
-				parRepJ2.coul=0;
-				parRepJ2.nomAdvers[5]="NULL";
-			}	 
-			nbJoueur++;
-		}
-	}
-	parRepJ1.err=0;
-	parRepJ1.coul=0;
-	parRepJ1.nomAdvers[TNOM]=parReqJ2.nomJoueur[TNOM];
-	parRepJ2.err=0;
-	parRepJ2.coul=1;
-	parRepJ2.nomAdvers[TNOM]=parReqJ2.nomJoueur[TNOM];
-	//TODO Renvoi aux deux joueurs ainsi que le numéro de partie
-	tourJ1 = &sock_transJ1;
-	tourJ2 = &sock_transJ2;
-	//TODO Demander au joueur 1 de commencer son coup 
-	while (nbJoueur<2){
-		err = recv(*tourJ1, &parCoupReqJ1, sizeof(TCoupReq), 0);
-		if (err < 0) {
-			perror("serveur: erreur dans la reception");
-			shutdown(sock_trans, SHUT_RDWR); close(sock_trans);
-			close(sock_cont);
-			return 4;
-		}
-		if (parCoupReq1.idRequest!=1){
-			parCoupRepJ1.err=3;
-			parCoupRepJ1.validCoup=2;
-			parCoupRepJ1.propCoup=3;
-			//TODO envoi aux deux joueurs et fin partie
-		}else{
-			if(validationCoup(parCoupReqJ1.coul++, parCoupReqJ1, parCoupJ1.propCoup)==true){
-				parCoupRepJ1.err=0;
-				parCoupRepJ1.validCoup=0;
-				parCoupRepJ1.
-				if(parCoupJ1.propCoup==0){
-					//TODO renvoi coup à joueur adverse
+			if (parCoupReq1.idRequest!=1){
+				parCoupRepJ1.err=3;
+				parCoupRepJ1.validCoup=2;
+				parCoupRepJ1.propCoup=3;
+				//TODO envoi aux deux joueurs et fin partie
+			}else{
+				if(validationCoup(parCoupReqJ1.coul++, parCoupReqJ1, parCoupJ1.propCoup)==true){
+					parCoupRepJ1.err=0;
+					parCoupRepJ1.validCoup=0;
+					//renvoi validité coup aux deux joueurs 
+					if(parCoupJ1.propCoup==0){
+						//TODO renvoi coup à joueur adverse
+					}
 				}
-			}
 			
+			}
+			nbJoueur++;
 		}
-		nbJoueur++;
 	}
   err = recv(sock_trans, &parReq, sizeof(TPartieReq), 0);
   if (err < 0) {
