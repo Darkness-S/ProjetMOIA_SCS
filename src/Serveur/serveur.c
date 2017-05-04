@@ -41,7 +41,7 @@
 
 int main(int argc, char** argv) {
   int nbJoueur=0,
-  	  etatPartie=0,
+ 	  //etatPartie=0,
   	  nbPartie=0,
 	  sock_cont, 
       sock_transJ1,
@@ -145,7 +145,14 @@ int main(int argc, char** argv) {
 	//TODO Renvoi aux deux joueurs ainsi que le numéro de partie
 	//TODO Demander au joueur 1 de commencer son coup 
 	while (nbPartie<2){
-		while (etatPartie<1){
+		if(nbPartie==0){
+			JouerCoup(socket_cont, sock_transJ1, sock_transJ2, parCoupReqJ1, parCoupReqJ2, parCoupRepJ1, parCoupRepJ2);
+			nbPartie++;
+		}else{
+			JouerCoup(socket_cont, sock_transJ2, sock_transJ1, parCoupReqJ2, parCoupReqJ1, parCoupRepJ2, parCoupRepJ1);
+			nbPartie++;
+		}
+		/*while (etatPartie<1){
 			err = recv(*tourJ1, &parCoupReqJ1, sizeof(TCoupReq), 0);
 			if (err < 0) {
 				perror("serveur: erreur dans la reception");
@@ -153,7 +160,7 @@ int main(int argc, char** argv) {
 				close(sock_cont);
 				return 4;
 			}
-			if (parCoupReq1.idRequest!=1){
+			if (parCoupReqJ1.idRequest!=1){
 				parCoupRepJ1.err=3;
 				parCoupRepJ1.validCoup=2;
 				parCoupRepJ1.propCoup=3;
@@ -170,7 +177,7 @@ int main(int argc, char** argv) {
 			
 			}
 			nbJoueur++;
-		}
+		}*/
 	}
   err = recv(sock_trans, &parReq, sizeof(TPartieReq), 0);
   if (err < 0) {
