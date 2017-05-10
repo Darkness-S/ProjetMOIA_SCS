@@ -9,31 +9,31 @@
 %%  Use mark(+,+,-X,-Y) to query/generate possible moves (X,Y).
 %%%%%
 mark(Player, [X|_],1,1) :- var(X), X=Player.
-mark(Player, [_,X|_],1,2) :- var(X), X=Player.
-mark(Player, [_,_,X|_],1,3) :- var(X), X=Player.
-mark(Player, [_,_,_,X|_],1,4) :- var(X), X=Player.
-mark(Player, [_,_,_,_,X|_],1,5) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,X|_],1,6) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,X|_],1,7) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,_,X|_],1,8) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,_,_,X|_],1,9) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,_,_,_,X|_],2,1) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,_,_,_,_,X|_],2,2) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,X|_],2,3) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,X|_],2,4) :- var(X), X=Player. 
+mark(Player, [_,X|_],2,1) :- var(X), X=Player.
+mark(Player, [_,_,X|_],3,1) :- var(X), X=Player.
+mark(Player, [_,_,_,X|_],1,2) :- var(X), X=Player.
+mark(Player, [_,_,_,_,X|_],2,2) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,X|_],3,2) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,X|_],1,3) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,_,X|_],2,3) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,_,_,X|_],3,3) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,_,_,_,X|_],1,4) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,_,_,_,_,X|_],2,4) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,X|_],3,4) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,X|_],1,5) :- var(X), X=Player. 
 mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],2,5) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],2,6) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],2,7) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],2,8) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],2,9) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,1) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,2) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,3) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,4) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,5) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,6) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,7) :- var(X), X=Player. 
-mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,8) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,5) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],1,6) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],2,6) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,6) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],1,7) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],2,7) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,7) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],1,8) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],2,8) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,8) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],1,9) :- var(X), X=Player. 
+mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],2,9) :- var(X), X=Player. 
 mark(Player, [_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,X|_],3,9) :- var(X), X=Player. 
 
 %%%%%
@@ -48,6 +48,24 @@ move(P,(3,2),[X1,X2,X3,X4,X5,X6|R],[X1,X2,X3,X4,X5,P|R]) :- var(X6).
 move(P,(1,3),[X1,X2,X3,X4,X5,X6,X7|R],[X1,X2,X3,X4,X5,X6,P|R]) :- var(X7).
 move(P,(2,3),[X1,X2,X3,X4,X5,X6,X7,X8|R],[X1,X2,X3,X4,X5,X6,X7,P|R]) :- var(X8).
 move(P,(3,3),[X1,X2,X3,X4,X5,X6,X7,X8,X9|R],[X1,X2,X3,X4,X5,X6,X7,X8,P|R]) :- var(X9).
+move(P,(1,4),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,P|R]) :- var(X10).
+move(P,(2,4),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,P|R]) :- var(X11).
+move(P,(3,4),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,P|R]) :- var(X12).
+move(P,(1,5),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,P|R]) :- var(X13).
+move(P,(2,5),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,P|R]) :- var(X14).
+move(P,(3,5),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,P|R]) :- var(X15).
+move(P,(1,6),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,P|R]) :- var(X16).
+move(P,(2,6),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,P|R]) :- var(X17).
+move(P,(3,6),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,P|R]) :- var(X18).
+move(P,(1,7),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,P|R]) :- var(X19).
+move(P,(2,7),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,P|R]) :- var(X20).
+move(P,(3,7),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,P|R]) :- var(X21).
+move(P,(1,8),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,P|R]) :- var(X22).
+move(P,(2,8),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,P|R]) :- var(X23).
+move(P,(3,8),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23,X24|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23,P|R]) :- var(X24).
+move(P,(1,9),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23,X24,X25|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23,X24,P|R]) :- var(X25).
+move(P,(2,9),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23,X24,X25,X26|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23,X24,X25,P|R]) :- var(X26).
+move(P,(3,9),[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23,X24,X25,X26,X27|R],[X1,X2,X3,X4,X5,X6,X7,X8,X9,X10,X11,X12,X13,X14,X15,X16,X17,X18,X19,X20,X21,X22,X23,X24,X25,X26,P|R]) :- var(X27).
 
 %%%%%
 %%  Record a move: record(+,+,+).
@@ -87,26 +105,16 @@ win([_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,K1,K2,K3|_],P) :- K1==P, K2
 %%%%%
 %%  A line is open if each position is either free or equals the Player
 %%%%%
-open([Z1,Z2,Z3|_],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
-open([_,_,_,Z1,Z2,Z3|_],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
-open([_,_,_,_,_,_,Z1,Z2,Z3],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
-open([Z1,_,_,Z2,_,_,Z3,_,_],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
-open([_,Z1,_,_,Z2,_,_,Z3,_],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
-open([_,_,Z1,_,_,Z2,_,_,Z3],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
-open([Z1,_,_,_,Z2,_,_,_,Z3],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
-open([_,_,Z1,_,Z2,_,Z3,_,_],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
-
-%%%%%
-%% Calculate the value of a position, o maximizes, x minimizes.
-%%%%%
-value(Board,100) :- win(Board,o), !.
-value(Board,-100) :- win(Board,x), !.
-value(Board,E) :- 
-   findall(o,open(Board,o),MAX), 
-   length(MAX,Emax),      % # lines open to o
-   findall(x,open(Board,x),MIN), 
-   length(MIN,Emin),      % # lines open to x
-   E is Emax - Emin.
+%  :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
+win([Z1,Z2,Z3|_],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
+win([_,_,_,Z1,Z2,Z3|_],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
+win([_,_,_,_,_,_,Z1,Z2,Z3],Player) :- (var(Z1) | Z1 == Player),(var(Z2) | Z2 == Player), (var(Z3) | Z3 == Player).
+win([_,_,_,_,_,_,_,_,_,A1,A2,A3|_],Player) :- (var(A1) | A1 == Player),(var(A2) | A2 == Player), (var(A3) | A3 == Player). 
+win([_,_,_,_,_,_,_,_,_,_,_,_,A1,A2,A3|_],Player) :- (var(A1) | A1 == Player),(var(A2) | A2 == Player), (var(A3) | A3 == Player). 
+win([_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,A1,A2,A3|_],Player) :- (var(A1) | A1 == Player),(var(A2) | A2 == Player), (var(A3) | A3 == Player). 
+win([_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,K1,K2,K3|_],Player) :- (var(K1) | K1 == Player),(var(K2) | K2 == Player), (var(K3) | K3 == Player).
+win([_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,K1,K2,K3|_],Player) :- (var(K1) | K1 == Player),(var(K2) | K2 == Player), (var(K3) | K3 == Player).
+win([_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,K1,K2,K3|_],Player) :- (var(K1) | K1 == Player),(var(K2) | K2 == Player), (var(K3) | K3 == Player).
    
    alpha_beta(_Player,0,Position,_Alpha,_Beta,_NoMove,Value) :- 
    value(Position,Value).
@@ -148,7 +156,7 @@ h(X,Y) :- record(x,X,Y), showBoard.
 
 c :- 
    board(B), 
-   alpha_beta(o,2,B,-200,200,(X,Y),_Value), % <=== NOTE
+   alpha_beta(o,2,B,-100,100,(X,Y),_Value), % <=== NOTE
    record(o,X,Y), showBoard.
 
 showBoard :- 

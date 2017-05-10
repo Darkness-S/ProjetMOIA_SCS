@@ -26,54 +26,32 @@
 
 /* inclusion bibliothèque TCP */
 #include "fonctionsTCP.h"
+#include "fonctionClient.h"
 
 #define TAIL_BUF 100
+#define SIZE_NAME 30
+
 int main(int argc, char **argv) {
   char chaine[TAIL_BUF];
+  char playerName[SIZE_NAME] = "Zarnakyn"; 
   int sock,               /* descripteur de la socket locale */
       err;                /* code d'erreur */
   /*
    * verification des arguments
    */
-  if (argc != 3) {
-    printf("usage : client nom_machine no_port\n");
+  if (argc < 3) {
+    printf("usage : client ip no_port nom_machine ...\n");
     return 1;
   }
-  
-  /* 
-   * creation d'une socket, domaine AF_INET, protocole TCP 
-   */
-  printf("(client) connect to %s, %d\n", argv[1], atoi(argv[2]));
-  sock = socketClient(argv[1], atoi(argv[2]));
-  if (sock < 0) { 
-    printf("(client) erreur socketClient\n");
-    return 2;
+
+  if(argv[3]!=null){
+	strcpy(playerName, argv[3]);  
   }
-  
-  /* 
-   * saisie de la chaine 
-   */
-  printf("(client) donner une chaine : ");
-  scanf("%s", chaine);
-  printf("(client) envoi de - %s - \n", chaine);
-  
-  
-  /*
-   * envoi de la chaine
-   */
-  err = send(sock, chaine, strlen(chaine)+1, 0);
-  if (err != strlen(chaine)+1) {
-    perror("(client) erreur sur le send");
-    shutdown(sock, SHUT_RDWR); close(sock);
-    return 3;
-  }
-  printf("(client) envoi realise\n");
-  
-  /* 
-   * fermeture de la connexion et de la socket 
-   */
-  shutdown(sock, SHUT_RDWR);
-  close(sock);
+	/* Set player name */ 
+	setPlayer(playerName); 
+
+	/* Connect to the server */
+    connexion(argv[1], atoi(argv[2])); 
   return 0;
 }
  
