@@ -2,35 +2,46 @@ CC=gcc
 CFLAGS=-W -Wall
 
 OBJDIR=obj
+OBJSERDIR=$(OBJDIR)/serveur
+OBJCLIDIR=$(OBJDIR)/client
 BINDIR=bin
 SRCDIR=src
+SRCSERDIR=$(SRCDIR)/serveur
+SRCCLIDIR=$(SRCDIR)/client
 TMPDIR=tmp
 INCDIR=include
 
-SRC=$(wildcard $(SRCDIR)/*.c)
+SRCSER=$(wildcard $(SRCSERDIR)/*.c)
 INC=$(wildcard $(INCDIR)/*.h)
-OBJ=$(SRC:.c=.o)
+OBJSER=$(SRCSER:$(SRCSERDIR)/%.c=$(OBJSERDIR)/%.o)
 
 EXECS=$(BINDIR)/serveur
-
+EXECC=$(BINDIR)/client
 
 all : $(EXECS)
 
-$(EXECS): $(OBJ)
-	@$(CC) -o $@ $^ $(CFLAGS)
+$(EXECS): $(OBJSER) $(OBJSERDIR)/*.o
+	@$(CC) $^ $(CFLAGS) -o $@
 
-$(OBJDIR)/main.o : $(INCDIR)/fonctionsServeur.h
+$(OBJSERDIR)/main.o : $(INCDIR)/fonctionsServeur.h
 
-$(OBJDIR)/%.o: $(SRCDIR)/Serveur/%.c
+$(OBJSERDIR)/%.o : $(SRCSERDIR)/%.c
 	@$(CC) -o $@ -c $< $(CFLAGS)
 
+
 clean:
-		mv $(OBJDIR)/colonne.o $(TMPDIR); 
-		mv $(OBJDIR)/fonctionsTCP.o $(TMPDIR); 
-		rm $(OBJDIR)/*.o; rm $(BINDIR)/$(EXECS);
-		mv $(TMPDIR)/colonne.o $(OBJDIR); 
-		mv $(TMPDIR)/fonctionsTCP.o $(OBJDIR); 
-	
+		mv $(OBJSERDIR)/colonne.o $(TMPDIR); 
+		mv $(OBJSERDIR)/fonctionsTCP.o $(TMPDIR);
+		rm $(OBJSERDIR)/*.o;
+		rm -rf $(SRCDIR)/*/*.*~;
+		rm -rf $(OBJDIR)/*/*.*~;
+		rm -rf $(INCDIR)/*.*~;
+		rm -rf ./*.*~;
+		rm -rf ./*~;
+		mv $(TMPDIR)/colonne.o $(OBJSERDIR); 
+		mv $(TMPDIR)/fonctionsTCP.o $(OBJSERDIR);
+		rm $(EXECS);
+
 mvin : 
-		mv $(TMPDIR)/colonne.o $(OBJDIR); 
-		mv $(TMPDIR)/fonctionsTCP.o $(OBJDIR); 
+		mv $(TMPDIR)/colonne.o $(OBJSERDIR); 
+		mv $(TMPDIR)/fonctionsTCP.o $(OBJSERDIR); 
