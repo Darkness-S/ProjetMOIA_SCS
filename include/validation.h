@@ -14,7 +14,6 @@
 
 #ifndef _validation_h
 #define _validation_h
-#include "./protocolColonne.h"
 
 /* Validation d'un coup :
  * parametres : 

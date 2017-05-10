@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdbool.h>
 /* inclusions pour les sockets */
 #include <sys/socket.h>
 
@@ -10,9 +10,10 @@
 #include <unistd.h>
 
 /* inclusion bibliothèque TCP */
-#include "../../include/validation.h"
 #include "../../include/fonctionsTCP.h"
 #include "../../include/fonctionClient.h"
+#include "../../include/protocolColonne.h"
+#include "../../include/validation.h"
 
 #define TAIL_BUF 100
 #define SIZE_NAME 30
@@ -332,7 +333,7 @@ int gameGo(int nb){
 		switch(state){
 			case 0: 
 				reponseServJeu1(&query); 
-				if(query.validCoup == VALID){
+				if(answer.validCoup == VALID){
 					gameOpponentTurn(&query);
 					gameReadTurn(&query); 
 				}

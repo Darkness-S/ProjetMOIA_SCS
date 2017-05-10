@@ -1,5 +1,5 @@
-#ifndef FONCTIONCLIENT_H
-#define FONCTIONCLIENT_H
+#ifndef _fonctionClient_h
+#define _fonctionClient_h
 
 #include "./protocolColonne.h"
 

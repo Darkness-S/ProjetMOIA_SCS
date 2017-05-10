@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <stdbool.h>
 /* inclusions pour les sockets */
 #include <sys/socket.h>
 
@@ -25,9 +25,9 @@
 #include <unistd.h>
 
 /* inclusion bibliothèque TCP */
-#include "../../include/validation.h"
 #include "../../include/fonctionsTCP.h"
 #include "../../include/fonctionClient.h"
+
 
 #define TAIL_BUF 100
 #define SIZE_NAME 30
