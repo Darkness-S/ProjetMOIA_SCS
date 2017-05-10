@@ -25,8 +25,9 @@
 #include <unistd.h>
 
 /* inclusion bibliothèque TCP */
-#include "fonctionsTCP.h"
-#include "fonctionClient.h"
+#include "../../include/validation.h"
+#include "../../include/fonctionsTCP.h"
+#include "../../include/fonctionClient.h"
 
 #define TAIL_BUF 100
 #define SIZE_NAME 30
@@ -44,15 +45,23 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  if(argv[3]!=null){
+  if(argv[3]!=NULL){
 	strcpy(playerName, argv[3]);  
   }
 	/* Set player name */ 
 	setPlayer(playerName); 
 
 	/* Connect to the server */
-    connexion(argv[1], atoi(argv[2])); 
-  return 0;
+    connectToServ(argv[1], atoi(argv[2])); 
+	
+	gameQuery(); 
+
+	gameGo(0); 
+	gameGo(1); 
+	
+	exitAll(); 
+
+	return 0;
 }
  
 
