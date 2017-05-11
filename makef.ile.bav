@@ -12,6 +12,12 @@ SRCCLIDIR=$(SRCDIR)/client
 TMPDIR=tmp
 INCDIR=include
 
+SRCSER=$(wildcard $(SRCSERDIR)/*.c)
+SRCCLI=$(wildcard $(SRCCLIDIR)/*.c)
+INC=$(wildcard $(INCDIR)/*.h)
+OBJSER=$(SRCSER:$(SRCSERDIR)/%.c=$(OBJSERDIR)/%.o)
+OBJCLI=$(SRCCLI:$(SRCCLIDIR)/%.c=$(OBJCLIDIR)/%.o)
+
 EXECS=$(BINDIR)/serveur
 EXECC=$(BINDIR)/client
 
@@ -21,30 +27,26 @@ serveur : $(EXECS)
 
 client : $(EXECC)
 
-$(EXECS): $(OBJSERDIR)/fonctionsServeur.o $(OBJSERDIR)/serveur.o $(OBJCOMDIR)/fonctionsTCP.o $(OBJCOMDIR)/colonne.o 
+$(EXECS): $(OBJSER) $(OBJSERDIR)/*.o $(OBJCOMDIR)/*.o
 	@$(CC) $^ $(CFLAGS) -o $@
 
-$(EXECC): $(OBJCLIDIR)/fonctionClient.o $(OBJCLIDIR)/client.o $(OBJCOMDIR)/fonctionsTCP.o $(OBJCOMDIR)/colonne.o 
+$(EXECC): $(OBJCLI) $(OBJCLIDIR)/*.o
 	@$(CC) $^ $(CFLAGS) -o $@
 
-$(OBJCLIDIR)/fonctionClient.o : $(INCDIR)/fonctionClient.h
+#$(OBJCLIDIR)/main.o : $(INCDIR)/fonctionClient.h
 
-$(OBJCLIDIR)/client.o : $(SRCCLIDIR)/client.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+#$(OBJCLIDIR)/%.o : $(SRCCLIDIR)/%.c
+#	@$(CC) -o $@ -c $< $(CFLAGS)
 
-$(OBJCLIDIR)/fonctionClient.o : $(SRCCLIDIR)/fonctionClient.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+#$(OBJSERDIR)/main.o : $(INCDIR)/fonctionsServeur.h
 
-$(OBJSERDIR)/fonctionsServeur.o : $(INCDIR)/fonctionsServeur.h
+$(OBJSERDIR)/%.o : $(SRCSERDIR)/%.c
+	@$(CC) -o $@ -c $< $(CFLAGS)
 
-$(OBJSERDIR)/serveur.o : $(SRCSERDIR)/serveur.c
-	$(CC) -o $@ -c $< $(CFLAGS)
 
-$(OBJSERDIR)/fonctionsServeur.o : $(SRCSERDIR)/fonctionsServeur.c
-	$(CC) -o $@ -c $< $(CFLAGS)
-	
-	
 clean:
+		#mv $(OBJSERDIR)/colonne.o $(TMPDIR); 
+		#mv $(OBJSERDIR)/fonctionsTCP.o $(TMPDIR);
 		rm $(OBJSERDIR)/*.o;
 		rm $(OBJCLIDIR)/*.o;
 		rm -rf $(SRCDIR)/*/*.*~;
@@ -52,16 +54,22 @@ clean:
 		rm -rf $(INCDIR)/*.*~;
 		rm -rf ./*.*~;
 		rm -rf ./*~;
+		#mv $(TMPDIR)/colonne.o $(OBJSERDIR); 
+		#mv $(TMPDIR)/fonctionsTCP.o $(OBJSERDIR);
 		rm $(EXECS);
 		rm $(EXECC);
 
 cleanS :
+		#mv $(OBJSERDIR)/colonne.o $(TMPDIR); 
+		#mv $(OBJSERDIR)/fonctionsTCP.o $(TMPDIR);
 		rm $(OBJSERDIR)/*.o;
 		rm -rf $(SRCDIR)/*/*.*~;
 		rm -rf $(OBJDIR)/*/*.*~;
 		rm -rf $(INCDIR)/*.*~;
 		rm -rf ./*.*~;
 		rm -rf ./*~;
+		#mv $(TMPDIR)/colonne.o $(OBJSERDIR); 
+		#mv $(TMPDIR)/fonctionsTCP.o $(OBJSERDIR);
 		rm $(EXECS);
 		
 cleanC :
@@ -76,3 +84,4 @@ cleanC :
 mvin : 
 		mv $(TMPDIR)/colonne.o $(OBJSERDIR); 
 		mv $(TMPDIR)/fonctionsTCP.o $(OBJSERDIR);
+		 

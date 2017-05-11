@@ -172,20 +172,17 @@ int receptPartie(){
 }
 
 int jouerPartie(){
-	nbJoueurAct=0;
 	while (nbPartie<2){
-		if(nbPartie==1){
+		if(nbPartie==0){
+			nbJoueurAct=0;
+		}else{
 			nbJoueurAct=1;
-			jTemp = j2;
-			j2 = j1;
-			j1 = jTemp;
 		}
-		etatPartie=0;
 		printf("Début partie %d\n", nbPartie+1);
 		while (etatPartie<1){
-			//FD_ZERO(&readSet);
-			//FD_SET(sock_transJ1, &readSet);
-			//FD_SET(sock_transJ2, &readSet);
+			FD_ZERO(&readSet);
+			FD_SET(sock_transJ1, &readSet);
+			FD_SET(sock_transJ2, &readSet);
 			jouerCoupPar();
 			if(nbJoueurAct==0){
 				jTemp = j2;
@@ -211,10 +208,11 @@ int jouerPartie(){
 
 int jouerCoupPar(){
 	struct timeval timeout;
-	timeout.tv_sec = TIME_MAX;
+	timeout.tv_sec = 6;
 	timeout.tv_usec = 0;
+	printf("----%d----\n",nbJoueurAct);
 	err=select(nbJoueurAct, &readSet, NULL, NULL, &timeout);
-	if (err = 0) {
+	if (err == 0) {
 		perror("serveur : erreur dans la selection du socket (timeout)");
 		parCoupRep.err=2;
 		parCoupRep.validCoup=1;
@@ -252,7 +250,6 @@ int jouerCoupPar(){
 					reqCoupPartieAdv();
 				}else{
 					messageFinPartie();
-					etatPartie++;
 				}
 			}	
 		}

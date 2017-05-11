@@ -1,16 +1,16 @@
-#ifndef _fonctionsServeur_h
-#define _fonctionsServeur_h
-
-#define TAIL_BUF 100
-#define TIME_MAX 6
-#define TNOM 30
-
-int DemPartie(int port);
+#ifndef _FONCTIONSSERVEUR_H
+#define _FONCTIONSSERVEUR_H
+#include "./protocolColonne.h"
+int demPartie(int port);
 int receptPartie();
-//int JouerCoup();
+int jouerPartie();
+int jouerCoupPar();
 void affectRep();
 int affecterJoueur(int oj);
 int repDemParte();
+int repCoupPartie();
+int reqCoupPartieAdv();
+void messageFinPartie();
 void closeSock();
 
 #endif

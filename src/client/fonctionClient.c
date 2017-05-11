@@ -15,9 +15,6 @@
 #include "../../include/protocolColonne.h"
 #include "../../include/validation.h"
 
-#define TAIL_BUF 100
-#define SIZE_NAME 30
-
 int err; 
 
 char player[SIZE_NAME]; 
