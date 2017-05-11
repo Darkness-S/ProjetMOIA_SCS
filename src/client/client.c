@@ -25,18 +25,13 @@
 #include <unistd.h>
 
 /* inclusion bibliothèque TCP */
-#include "../../include/fonctionsTCP.h"
 #include "../../include/fonctionClient.h"
 
-
-#define TAIL_BUF 100
 #define SIZE_NAME 30
 
 int main(int argc, char **argv) {
-  char chaine[TAIL_BUF];
+ // char chaine[TAIL_BUF];
   char playerName[SIZE_NAME] = "Zarnakyn"; 
-  int sock,               /* descripteur de la socket locale */
-      err;                /* code d'erreur */
   /*
    * verification des arguments
    */
@@ -52,7 +47,7 @@ int main(int argc, char **argv) {
 	setPlayer(playerName); 
 
 	/* Connect to the server */
-    connectToServ(argv[1], atoi(argv[2])); 
+    connectSocket(argv[1], atoi(argv[2])); 
 	
 	gameQuery(); 
 

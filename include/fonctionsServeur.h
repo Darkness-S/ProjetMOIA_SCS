@@ -11,6 +11,8 @@ int repDemParte();
 int repCoupPartie();
 int reqCoupPartieAdv();
 void messageFinPartie();
+void messageFinPartieTimeout();
+void afficherScore();
 void closeSock();
 
 #endif

@@ -1,9 +1,9 @@
 #ifndef _fonctionClient_h
 #define _fonctionClient_h
-
 #include "./protocolColonne.h"
+int connectToServ(char* ip_serv, int pt_serv, int* socket);
 
-int connectToServ(char* ip_serv, int pt_serv); 
+int connectSocket(char* ip_serv, int pt_serv);  
 
 int exitAll(); 
 
@@ -23,8 +23,10 @@ int gameOpponentTurn(TCoupReq* query);
 
 int gameReadTurn(TCoupReq* query); 
 
-int reponseServJeu1(TCoupRep* query); 
+int gameReceive(TCoupRep* query); 
 
 int gameGo(int nb); 
+
+int gameEnd(TCoupRep* answer); 
 
 #endif 

@@ -6,22 +6,38 @@
 /* inclusions pour les sockets */
 #include <sys/socket.h>
 
+/* According to POSIX.1-2001 */
+#include <sys/select.h>
+
+/* According to earlier standards */
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 /* inclusions pour close */
 #include <unistd.h>
 
 /* inclusion bibliothèque TCP */
+
 #include "../../include/fonctionsTCP.h"
 #include "../../include/fonctionClient.h"
-#include "../../include/protocolColonne.h"
-#include "../../include/validation.h"
+
+#define SIZE_NAME 30
 
 int err; 
-
+char* IPTEST1 = "127.0.0.1"; 
+char* IPTEST2 = "127.0.0.1"; 
+int nbPort = 1235; 
 char player[SIZE_NAME]; 
+//player[0] = '\0'; 
 char chaineComm[256]; 
+fd_set readSet; 
+int fdRS = sizeof(readSet)*2; 
 
 int setPlayer(char playerName[30]){
-	strcpy(player, playerName); 
+	strcpy(player, ""); 
+	strcat(player, playerName); 
+	return 1; 
 }
 
 int socketServer; 
@@ -35,22 +51,32 @@ int exitAll(){
     return 0; 
 }
 
-int connexion(char* ip_serv, int pt_serv, int *sock){
-	printf("Connect to %s, %d\n", ip_serv, pt_serv); 
-    *sock = socketClient(ip_serv, pt_serv); 
-    if (*sock < 0){
-		perror("\t\nError connexion socketClient\n"); 
-		exitAll();
-		return -1;   
-	}
-	printf("Connected %s | %d",ip_serv, *sock); 
+int connectToServ(char* ip_serv, int pt_serv, int* socket){
+//	if(sock!=NULL){
+		printf("Connect to %s, %d\n", ip_serv, pt_serv); 
+		*socket = socketClient(ip_serv, pt_serv); 
+		if (*socket < 0){
+			perror("\t\nError connexion socketClient\n"); 
+			exitAll();
+			return -1;   
+		}
+		return 1; 
+//	}
+//	else
+//	{
+//		connectToServ(ip_serv, pt_serv, socketIA); 
+//	}
+}
+
+int connectSocket(char* ip_serv, int pt_serv){
+	connectToServ(ip_serv, pt_serv, &socketServer); 
 	return 1; 
 }
 
 int gameQuery(){
 	TPartieReq query; 
 	query.idRequest = PARTIE; 
-	
+	strcat(query.nomJoueur, player);
 	err = send(socketServer, &query, sizeof(TPartieReq), 0); 
 	if( err != sizeof(TPartieReq)){
 		perror("\t\nError in gameQuery function | Request fail"); 
@@ -65,7 +91,8 @@ int gameQuery(){
 TPion pion; 
 char opponentName[SIZE_NAME]; 
 int answer(){
-	TPartieRep answer; 
+	TPartieRep answer;
+	char* couleur;  
 	err = recv(socketServer, &answer, sizeof(TPartieRep), 0); 
 	if(err<0){
 		perror("Error in answer"); 
@@ -74,7 +101,9 @@ int answer(){
 	}
 	pion = answer.coul; 
 	strcpy(opponentName, answer.nomAdvers); 
-	printf("Color : %d | Opponent : %s\n", pion, opponentName); 
+	if(pion == 0) couleur = "BLANC";
+	if(pion == 1) couleur = "NOIR"; 
+	printf("Color : %s | Opponent : %s\n", couleur, opponentName); 
 	return 1; 
 }
 
@@ -119,6 +148,10 @@ int gameReceiveFromAI(TCoupReq* query){
 			query->action.deplPion.caseArr.col = colonne[tokens[2]-'A']; 
 			query->action.deplPion.caseArr.lg = ligne[tokens[3]-'A']; 
 			break; 
+
+		case PASSE: 
+			printf("Do nothing \n"); 
+			break; 
 	}
 
 	query->coul = pion; 
@@ -136,14 +169,15 @@ int gameQueryTurn(TCoupReq* query){
 	return 1; 
 }
 
-int gameOpponentTurn(TCoupReq* query){
-	err = recv(socketServer, query, sizeof(TCoupReq), 0); 
-	if( err != sizeof(TCoupReq)) {
+int gameOpponentTurn(TCoupRep* query){
+	err = recv(socketServer, query, sizeof(TCoupRep), 0); 
+	if( err != sizeof(TCoupRep)) {
 		perror("Opponent turn error"); 
 		exitAll(); 
 		return -1; 
 	}
 	printf("Opponent turn done"); 
+	return 1; 
 }
 
 int gameReadTurn(TCoupReq* query){
@@ -171,6 +205,9 @@ int gameReadTurn(TCoupReq* query){
 	}
 
 	switch(query->typeCoup){
+		case PASSE: 
+				printf("Do nothing\n"); 
+
 		case POS_PION:
 			colonne = query->action.posPion.col; 
 			switch(colonne){
@@ -287,49 +324,41 @@ int gameReadTurn(TCoupReq* query){
 		return -1; 
 	}
 	printf("Turn done"); 
-}
-
-// A RETIRER TODO
-int reponseServJeu1(TCoupRep* rep){
-  	printf("hell\n");
-	err = recv(socketServer, rep, sizeof(TCoupRep),0);
-	if(err<0){
-		perror("serveur :  erreur sur receive 1");
-		exitAll();
-		return -1;
-	}
-	return 1;
+	return 1; 
 }
 
 int gameGo(int nb){
 	int state; 
+	strcpy(chaineComm, ""); 
+	//chaineComm[0] = '\0'; 
 	TCoupReq query; 
 	TCoupRep answer; 
 	if(pion == BLANC){
-		strcpy(chaineComm, "BLANC"); 
+		strcat(chaineComm, "BLANC"); 
 		state = 1; 
 	}
 	else if(pion == NOIR){
-		strcpy(chaineComm, "NOIR"); 
+		strcat(chaineComm, "NOIR"); 
 		state = 0; 
 	}
-	//if(pion != BLANC && !numPartie){
-//		connexion2(
-	//}
-
-	if(nb == 0){
-		err = send(socketIA, &chaineComm, sizeof(chaineComm), 0); 
+	
+	//if(nb == 0){
+		err = send(socketServer, &chaineComm, sizeof(chaineComm), 0); 		
+			printf("Chaine comm : %s",&chaineComm); 
+	//TODO//err = send(socketIA, &chaineComm, sizeof(chaineComm), 0); 
 		if(err != sizeof(chaineComm)) {
-			perror("Error sending color to server"); 
+			printf("Chaine comm : %s",&chaineComm); 
+			perror("\n\tError sending color to server"); 
 			exitAll(); 
 			return -1; 
 		}
-	}
+	//}
 	chaineComm[0] = '\0'; 
+	strcpy(chaineComm, ""); 
 	while(answer.validCoup == VALID && answer.propCoup == CONT){
 		switch(state){
 			case 0: 
-				reponseServJeu1(&query); 
+				gameQueryTurn(&answer); 
 				if(answer.validCoup == VALID){
 					gameOpponentTurn(&query);
 					gameReadTurn(&query); 
@@ -337,19 +366,89 @@ int gameGo(int nb){
 				break; 
 
 			case 1: 
-				gameReceiveFromAI(&answer); 
-				gameQueryTurn(&answer); 
-				reponseServJeu1(&answer); 
+				FD_ZERO(&readSet); 
+				FD_SET(socketServer, &readSet); 
+				FD_SET(socketIA, &readSet); 
+				err  = select(fdRS, &readSet, NULL, NULL, NULL); 
+				if(err < 0){
+					perror("Select fail "); 
+					exitAll(); 
+					return -1; 
+				}
+				else if(FD_ISSET(socketIA, &readSet) != 0){
+							gameReceiveFromAI(&query); 
+							gameQueryTurn(&query); 
+							gameOpponentTurn(&answer); 
+				}
+				else if(FD_ISSET(socketServer, &readSet) != 0){
+							gameOpponentTurn(&answer); 
+				}
 				break; 			
-		}
-		if(state == 1){
-			state = 1; 
-		}
-		else
-		{
-			state = 0; 
 		}
 	}
 
+	switch(answer.validCoup){
+		case GAGNE:
+			if (state == 1){
+				printf("You win"); 
+			}		
+			else if (state == 0){
+				printf("You lose"); 
+			}
+			break; 
+		case PERDU: 
+			if (state == 1){
+				printf("You lose");
+			}
+			else if (state == 0){
+				printf("You win"); 
+			}
+			break; 
+
+		case NULLE: 
+				printf("Equality"); 
+				break; 
+	}
+
+	return 1; 
+}
+
+int gameEnd(TCoupRep* answer){
+	switch(answer->validCoup){
+		case VALID: 
+			strcpy(chaineComm, "VALID;"); 
+			break; 
+
+		case TIMEOUT:
+			strcpy(chaineComm, "TIMEOUT;"); 
+			break; 
+
+		case TRICHE: 
+			strcat(chaineComm, "TRICHE;"); 
+			break; 
+	}
+	switch(answer->propCoup){
+		case CONT: 
+			strcpy(chaineComm, "CONT;"); 
+			break; 
+		
+		case GAGNE: 
+			strcpy(chaineComm, "GAGNE;") ;
+			break; 
+
+		case NULLE: 
+			strcpy(chaineComm, "NULLE;"); 
+			break; 
+
+		case PERDU: 
+			strcpy(chaineComm, "PERDU;"); 
+			break; 
+	}
+	err = send(socketIA, chaineComm, sizeof(chaineComm), 0); 
+	if (err != sizeof(chaineComm)){
+		perror("Send to server fail"); 
+		exitAll(); 
+		return -1; 
+	}	
 	return 1; 
 }
