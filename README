@@ -1,0 +1,32 @@
+Sammy Loudiyi, Lucas Mary TP1A
+
+Structure du projet : 
+bin : dossier contenant les executables
+include : dossier contenant les headers
+lib : dossier contenant la libraire fonctionsTCP
+obj : dossier contenant les différents fichiers objets apres compilation (dans deux dossier séparé pour le serveur le client)
+obj/common : dossier contenant les fichier objet commun au serveur et client (fonctionsTCP.o et colonne.o, non supprimé par le makefile)
+src : dossier contenant les fichier source (sépraré en trois dossier pour le serveur, le client et le prolog)
+tmp : dossier pour divers fichier temporaire
+
+Pour compiler :
+	make : compile le tout (serveur, client C et client java)
+	make serveur : compile le serveur
+	make client : compile le client C et le client java
+Pour nettoyer le projet :
+	make clean : Supprime tout les fichiers .o (excepter ceux dans le dossier obj/common), .class, temporaire et executable du serveur, client C et client java
+	make cleanS : Supprime tout les fichiers .o (excepter ceux dans le dossier obj/common), temporaire et executable du serveur
+	make cleanC : Supprime tout les fichiers .o (excepter ceux dans le dossier obj/common), .class, temporaire et executable du serveur
+	
+Pour executer :
+	Par script : sh ./exec.sh (execute un serveur avec le port 1234, un client java avec le port 1244 et deux client C)
+	Manuellement  (à partir de la racine du projet pour les fichiers contenant dans ./bin):
+		Serveur : ./bin/serveur <port>
+		Client C : ./bin/client <ipServeur> <portServeur> <nom du joueur(optionnel>
+		Client java : java -cp ./bin interfaceCJavaProlog <ip>
+	Manuellement  (à partir de la racine du projet pour les fichiers dans la racine):
+		Serveur : ./serveur <port>
+		Client C : ./client <ipServeur> <portServeur> <nom du joueur(optionnel>
+		Client java : java interfaceCJavaProlog <ip>
+		
+
